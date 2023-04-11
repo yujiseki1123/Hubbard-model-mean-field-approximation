@@ -1,4 +1,5 @@
 using LinearAlgebra
+using Plots 
 
 function self_consistent(U)
     #input data
@@ -60,4 +61,11 @@ function self_consistent(U)
     return [delta,E_tot]
 end 
 
-print(self_consistent(2))
+x = [U*0.01 for U = 1:2000]
+
+res = [self_consistent(U*0.01) for U = 1:2000]
+MF_delta = [res[i][1] for i = 1:2000]
+f(x) = 0 
+
+plot(x,MF_delta,label="MF",xlabel="U/t",ylabel="Δ")
+plot!(f,label="exact")
