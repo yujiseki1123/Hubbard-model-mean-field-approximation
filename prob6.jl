@@ -26,7 +26,14 @@ function self_consistent(n,U,iter_num)
 
                 H_dn[i,i+1] = -t 
                 H_dn[i+1,i] = -t
+            else 
+                H_up[i,1] = -t 
+                H_up[1,i] = -t 
+
+                H_dn[i,1] = -t 
+                H_dn[1,i] = -t 
             end 
+
         end 
 
         #caluclating eigenvalues and eigenvectors
@@ -52,7 +59,12 @@ function self_consistent(n,U,iter_num)
         end 
 
         #calculating approx base energy E_tot 
-        E_tot = H_up_eigval[1] + H_dn_eigval[1] - U*mean_tot
+        E_tot = 0 
+        m  = n/3 
+        for i = 1 : m
+            E_tot = E_tot + H_up_eigval[i] + H_dn_eigval[i]
+        end  
+        E_tot = E_tot - U*mean_tot
 
 
         #print result 
@@ -60,6 +72,8 @@ function self_consistent(n,U,iter_num)
         
         #mixing 
         delta = mix_ratio * delta_new + (1 - mix_ratio) * delta
+
+        #delta = delta_new 
     end 
 
     return [delta,E_tot]
@@ -67,7 +81,7 @@ end
 
 x = [U*0.1 for U = 1:200]
 
-res = [self_consistent(6,U*0.1,100) for U = 1:200]
+res = [self_consistent(6,U*0.1,1000) for U = 1:200]
 MF_delta = [res[i][1] for i = 1:200]
 MF_ene = [res[i][2] for i = 1:200]
 f(x) = 0 
