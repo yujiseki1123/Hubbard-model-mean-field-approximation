@@ -56,10 +56,18 @@ function calc_eig_val(t,U)
                     
                     #反交換関係による符号変換
                     if spin_tmp == spins[j][2]
-                        if spins[j][1][l] == 1 
-                            ham[i,j] = -t
+                        if l == 1 
+                            if spins[j][1][l] == 1 
+                                ham[i,j] = t 
+                            else 
+                                ham[i,j] = -t 
+                            end 
                         else 
-                            ham[i,j] = t 
+                            if spins[j][1][l] == 1 
+                                ham[i,j] = -t
+                            else 
+                                ham[i,j] = t 
+                            end 
                         end 
                         #println(spins[i]," ",spins[j])
                         break 
@@ -86,10 +94,18 @@ function calc_eig_val(t,U)
                     
                     #反交換関係による符号変換
                     if spin_tmp == spins[j][1]
-                        if spins[j][2][k] == 1 
-                            ham[i,j] = -t 
+                        if l == 1 
+                            if spins[j][2][k] == 1
+                                ham[i,j] = t 
+                            else 
+                                ham[i,j] = -t 
+                            end   
                         else 
-                            ham[i,j] = t
+                            if spins[j][2][k] == 1 
+                                ham[i,j] = -t 
+                            else 
+                                ham[i,j] = t
+                            end 
                         end 
                         #println(spins[i]," ",spins[j])
                         break 
@@ -117,9 +133,10 @@ function calc_eig_val(t,U)
     
 end 
 
+#print(calc_eig_val(-1,0))
 
-y = [calc_eig_val(-1,U*0.1)　for U = 1:200]
-
+y = [calc_eig_val(-1,U*1)　for U = 1:2000]
+pushfirst!(y,calc_eig_val(-1,0))
 
 plot(x,MF_ene,label="MF",xlabel="U/t",ylabel="E/t")
 plot!(x,y,label="exact")
